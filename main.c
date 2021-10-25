@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-char *board[8][8] = {
-    {" ", "o", " ", "o", " ",  "o", " ", "o"},
-    {"o", " ", "o", " ", "o", " ", "o", " "},
-    {" ", "o", " ", "o", " ", "o", " ", "o"},
-    {" ", " ", " ", " ", " ", " ", " ", " "},
-    {" ", " ", " ", " ", " ", " ", " ", " "},
-    {"x", " ", "x", " ", "x", " ", "x", " "},
-    {" ", "x", " ", "x", " ",  "x", " ", "x"},
-    {"x", " ", "x", " ", "x", " ", "x", " "},
+char board[8][8] = {
+    {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
+    {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
+    {' ', 'o', ' ', 'o', ' ', 'o', ' ', 'o'},
+    {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'x'},
+    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
 };
 
 char turn = 'x';
@@ -21,41 +21,63 @@ int move(int i, int j, int k, int l);
 
 int main(void){
     printBoard();
+    int valid = move(0, 5, 1, 4);
+    printf("%d\n", valid);
+    if (valid == 0){
+        printf("valid move\n");
+    }
     return 0;
 }
 
 int move(int i, int j, int k, int l){
-    if (tolower(board[i][j]) != turn){
+    
+    // for(int iter = 0; board[j][i][iter]; iter++){
+    //     board[j][i][iter] = tolower(board[j][i][iter]);
+    // }
+    printf("square %c\n", board[j][i]);
+    printf("move to %c\n", board[l][k]);
+    if (board[j][i] != turn){
+        printf("Not your square\n");
         return -1;
     }
-    if (board[i][j] != " "){
+    if (board[l][k] != ' '){
+        printf("Space is occupied\n");
         return -1;
     }
-    if (turn == "x"){
-        if (j >= k){
+    if (turn == 'x'){
+        if (j <= l){
+            printf("not your turn\n");
             return -1;
         }
     }
-    if (turn == "o"){
-        if (j <= k){
+    if (turn == 'o'){
+        if (j >= l){
             return -1;
         }
     }
     if (7 <= i < 0){
+        printf("Out of bounds\n");
         return -1;
     }
     if (7 <= j < 0){
+        printf("Out of bounds\n");
         return -1;
     }
     if (7 <= k < 0){
+        printf("Out of bounds\n");
         return -1;
     }
     if (7 <= l < 0){
+        printf("Out of bounds\n");
         return -1;
     }
     if (i - k == 1 || i - k == -1){
-
+        if (j - l == 1 || j - l == -1){
+            return 0;
+        }
+        
     }
+    return -1;
 }
 
 void printBoard(){
@@ -68,7 +90,7 @@ void printBoard(){
     for (row = 0; row < 8; row++){
         printf("%d |", row+1);
         for (col = 0; col < 8; col++){
-            printf(" %s |", board[row][col]);
+            printf(" %c |", board[row][col]);
             
         }
         printf("\n");
