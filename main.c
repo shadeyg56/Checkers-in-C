@@ -20,6 +20,38 @@ int letterToCoord(char letter);
 int move(int i, int j, int k, int l);
 
 int main(void){
+    char i, k;
+    int j, l, x, x2;
+    printBoard();
+    while (1){
+        while (1){
+            printf("%c's turn: ", turn);
+            fflush(stdin);
+            scanf("%c%d", &i, &j);
+            printf("To: ");
+            fflush(stdin);
+            scanf("%c%d", &k, &l);
+            x = letterToCoord(i);
+            x2 = letterToCoord(k);
+            printf("x %d\n", x2);
+            printf("k %d\n", k);
+            if (move(x, j, x2, l) == 0){
+                switch (turn){
+                    case 'x':
+                        turn = 'o';
+                        break;
+                    case 'o':
+                        turn = 'x';
+                        break;
+                }
+                break;
+            }
+            else{
+                printf("Invalid move\n");
+            }
+        }
+        printBoard();
+    }
     printBoard();
     int valid = move(0, 5, 1, 4);
     printf("%d\n", valid);
@@ -34,6 +66,7 @@ int move(int i, int j, int k, int l){
     // for(int iter = 0; board[j][i][iter]; iter++){
     //     board[j][i][iter] = tolower(board[j][i][iter]);
     // }
+    printf("i %d, j %d, k %d, l %d\n", i, j, k, l);
     printf("square %c\n", board[j][i]);
     printf("move to %c\n", board[l][k]);
     if (board[j][i] != turn){
@@ -73,6 +106,8 @@ int move(int i, int j, int k, int l){
     }
     if (i - k == 1 || i - k == -1){
         if (j - l == 1 || j - l == -1){
+            board[l][k] = board[j][i];
+            board[j][i] = ' ';
             return 0;
         }
         
@@ -88,7 +123,7 @@ void printBoard(){
     int side;
     printf("  +---+---+---+---+---+---+---+---+\n");
     for (row = 0; row < 8; row++){
-        printf("%d |", row+1);
+        printf("%d |", row);
         for (col = 0; col < 8; col++){
             printf(" %c |", board[row][col]);
             
