@@ -143,11 +143,9 @@ int move(int i, int j, int k, int l){
                     break;
             }
             won = checkForWin();
-            fflush(stdin);
-            getchar();
             if (won == 1){
                 printf("%c wins the game!");
-                gameOver == 1;
+                gameOver = 1;
             }
             return 0;
         }
@@ -176,12 +174,10 @@ void printBoard(){
 }
 
 int checkForWin(){
-    printf("checking for win...\n");
     if (oPieces == 0 || xPieces == 0){
-        printf("here\n");
-        return 0;
+        return 1;
     }
-    return -1;
+    return 0;
 }
 
 int letterToCoord(char letter){
