@@ -2,20 +2,22 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#define ISKING(p) (p == 'X' || p == 'O')
+
 char board[8][8] = {
-    {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
-    {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
+    {' ', ' ', ' ', 'o', ' ',  'o', ' ', 'o'},
+    {'x', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
     {' ', 'o', ' ', 'o', ' ', 'o', ' ', 'o'},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
-    {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'x'},
-    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'o'},
+    {'x', ' ', 'x', ' ', 'x', ' ', ' ', ' '},
 };
 
 char turn = 'x';
-int xPieces = 1;
-int oPieces = 1;
+int xPieces = 12;
+int oPieces = 12;
 int gameOver = 0;
 
 void printBoard();
@@ -30,7 +32,6 @@ int main(void){
     while (gameOver == 0){
         while (1){
             printf("%c's turn: ", turn);
-            printf("o pieces %d\n", oPieces);
             fflush(stdin);
             scanf("%c%d", &i, &j);
             printf("To: ");
@@ -39,13 +40,17 @@ int main(void){
             x = letterToCoord(i);
             x2 = letterToCoord(k);
             if (move(x, j, x2, l) == 0){
-                switch (turn){
-                    case 'x':
-                        turn = 'o';
-                        break;
-                    case 'o':
-                        turn = 'x';
-                        break;
+                if (turn == 'x'){
+                    turn = 'o';
+                    if (l == 0){
+                        board[l][x2] = 'X';
+                    }
+                }
+                else if (turn == 'o'){
+                    turn = 'x';
+                    if (l == 7){
+                        board[l][x2] = 'O';
+                    }
                 }
                 break;
             }
@@ -53,7 +58,9 @@ int main(void){
                 printf("Invalid move\n");
             }
         }
-        printBoard();
+        if (gameOver == 0){
+            printBoard();
+        }
     }
     return 0;
 }
@@ -84,7 +91,7 @@ int move(int i, int j, int k, int l){
         printf("Out of bounds\n");
         return -1;
     }
-    if (board[j][i] != turn){
+    if (tolower(board[j][i]) != turn){
         printf("Not your square\n");
         return -1;
     }
@@ -94,15 +101,20 @@ int move(int i, int j, int k, int l){
     }
     if (turn == 'x'){
         opponent = 'o';
-        if (j <= l){
-            printf("not your turn\n");
-            return -1;
+        if (!ISKING(board[j][i])){
+            if (j <= l){
+                printf("An piece that is not a king can only move forward\n");
+                return -1;
+            }
         }
     }
     if (turn == 'o'){
         opponent = 'x';
-        if (j >= l){
-            return -1;
+        if (!ISKING(board[j][i])){
+            if (j >= l){
+                printf("An piece that is not a king can only move forward\n");
+                return -1;
+            }
         }
     }
     if (i - k == 1 || i - k == -1){
@@ -144,7 +156,7 @@ int move(int i, int j, int k, int l){
             }
             won = checkForWin();
             if (won == 1){
-                printf("%c wins the game!");
+                printf("%c wins the game!", turn);
                 gameOver = 1;
             }
             return 0;
@@ -155,7 +167,6 @@ int move(int i, int j, int k, int l){
 
 void printBoard(){
     system("cls");
-    printf("Printing board...\n");
     int row;;
     int col;
     int side;
