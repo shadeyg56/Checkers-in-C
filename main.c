@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "AI.h"
 
 #define ISKING(p) (p == 'X' || p == 'O')
 
@@ -28,6 +29,9 @@ int checkForWin();
 int main(void){
     char i, k;
     int j, l, x, x2;
+    int test;
+    test = validMoves(board);
+    printf("test %d\n", test);
     printBoard();
     while (gameOver == 0){
         while (1){
@@ -166,7 +170,7 @@ int move(int i, int j, int k, int l){
 }
 
 void printBoard(){
-    system("cls");
+    //system("cls");
     int row;;
     int col;
     int side;
