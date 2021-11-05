@@ -3,18 +3,12 @@
 #include <ctype.h>
 #include "AI.h"
 
-typedef struct{
-    int i;
-    int j;
-    int k;
-    int l;
-} Move;
 
+size_t moves = 1;
 Move *availableMoves = NULL;
 
 int validMoves(char board[][8]){
     int i, j, k, l;
-    size_t moves = 1;
     Move *currentMove = NULL;
     int iter = 0;
     availableMoves = malloc(sizeof(Move));
@@ -47,6 +41,10 @@ int validMoves(char board[][8]){
                 currentMove->j = j;
                 currentMove->k = k;
                 currentMove->l = l;
+                currentMove->jump = 0;
+                if (canJump(board, currentMove) == 1){
+                    currentMove->jump = 1;
+                }
                 availableMoves = realloc(availableMoves, moves * sizeof(Move));
                 availableMoves[moves-1] = *currentMove;
                 moves++;
@@ -54,4 +52,38 @@ int validMoves(char board[][8]){
         }
     }
     return 0;
+}
+
+
+
+int canJump(char board[][8], Move *move){
+    int i = move->i;
+    int j = move->j;
+    int k = move->k;
+    int l = move->l;
+    char from = board[j][i];
+    char to = board[l][k];
+    int jumpX;
+    int jumpY = j + 1;
+    if (i < k){
+        jumpX = i + 1;
+    }
+    else{
+        jumpX = i - 1;
+    }
+    char jumpedPiece = board[jumpY][jumpX];
+    if (jumpedPiece == 'x' || jumpedPiece == 'X'){
+        return 1;
+    }
+    return 0;
+}
+
+Move *pickMove(){
+    Move *currentMove = NULL;
+    for (int i = 0; i < moves; i++){
+        *currentMove = availableMoves[i];
+        if (currentMove->jump == 1){
+            return currentMove;
+        }
+    }
 }

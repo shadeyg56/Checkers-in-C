@@ -20,6 +20,7 @@ char turn = 'x';
 int xPieces = 12;
 int oPieces = 12;
 int gameOver = 0;
+int mode = 1;
 
 void printBoard();
 int letterToCoord(char letter);
@@ -30,11 +31,18 @@ int main(void){
     char i, k;
     int j, l, x, x2;
     int test;
+    Move *AIMove = NULL;
     test = validMoves(board);
     printf("test %d\n", test);
     printBoard();
     while (gameOver == 0){
         while (1){
+            if (mode == 1){
+                validMoves(board);
+                AIMove = pickMove();
+                move(AIMove->i, AIMove->j, AIMove->k, AIMove->l);
+                continue;
+            }
             printf("%c's turn: ", turn);
             fflush(stdin);
             scanf("%c%d", &i, &j);
