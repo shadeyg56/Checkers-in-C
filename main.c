@@ -31,17 +31,19 @@ int main(void){
     char i, k;
     int j, l, x, x2;
     int test;
-    Move *AIMove = NULL;
-    test = validMoves(board);
-    printf("test %d\n", test);
+    Move AIMove;
     printBoard();
     while (gameOver == 0){
         while (1){
             if (mode == 1){
-                validMoves(board);
-                AIMove = pickMove();
-                move(AIMove->i, AIMove->j, AIMove->k, AIMove->l);
-                continue;
+                if (turn == 'o'){
+                    validMoves(board);
+                    AIMove = pickMove();
+
+                    move(AIMove.i, AIMove.j, AIMove.k, AIMove.l);
+                    turn = 'x';
+                    break;
+                }
             }
             printf("%c's turn: ", turn);
             fflush(stdin);
@@ -103,7 +105,9 @@ int move(int i, int j, int k, int l){
         printf("Out of bounds\n");
         return -1;
     }
-    if (tolower(board[j][i]) != turn){
+
+     if (tolower(board[j][i]) != turn){
+        printf("space is %d, %d\n", i, j);
         printf("Not your square\n");
         return -1;
     }
