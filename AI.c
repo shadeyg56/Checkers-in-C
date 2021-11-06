@@ -11,14 +11,14 @@ int validMoves(char board[][8]){
     int i, j, k, l;
     int iter = 0;
     availableMoves = (Move*) malloc(sizeof(Move));
-    Move *varTest = availableMoves;
+    Move *currentMove = NULL;
     for (j = 0; j < 8; j++){
         for (i = 0; i < 8; i++){;
-
-            availableMoves[moves-1].jump = 0;
             iter++;
-            //printf("iter %d\n", iter++);
+            //printf("iter %d\n", iter++)
             for (int x = 0; x < 2; x++){
+                currentMove = &availableMoves[moves-1];
+                currentMove->jump = 0;
                 switch (x){
                     case 0:
                         k = i + 1;
@@ -31,30 +31,29 @@ int validMoves(char board[][8]){
                     continue;
                 }
                 l = j + 1;
-                availableMoves[moves-1].i = i;
-                availableMoves[moves-1].j = j;
-                availableMoves[moves-1].k = k;
-                availableMoves[moves-1].l = l;
+                currentMove->i = i;
+                currentMove->j = j;
+                currentMove->k = k;
+                currentMove->l = l;
                 if (tolower(board[j][i]) != 'o'){
-                    if (tolower(board[j][i]) == 'x'){
-
-                        // jumping currently broken
-                        continue;
-                        // if (canJump(board, availableMoves[moves-1]) == 1){
-                        //     availableMoves[moves-1].jump = 1;
-                        // }
+                    continue;
+                }
+                if (board[l][k] != ' '){
+                    if (tolower(board[l][k]) == 'x'){
+                        if (canJump(board, currentMove) == 1){
+                            currentMove->jump = 1;
+                        }
+                        else{
+                            continue;
+                        }
                     }
                     else{
                         continue;
                     }
                 }
-                if (board[l][k] != ' '){
-                    continue;
-                }
                 printf("%d, %d to %d, %d is a valid move\n", i, j, k, l);
                 moves++;
                 availableMoves = realloc(availableMoves, moves * sizeof(Move));
-                //printf("move test %d, %d\n", availableMoves[moves-1].i, availableMoves[moves-1].j);
             }
         }
     }
@@ -63,25 +62,28 @@ int validMoves(char board[][8]){
 
 
 
-int canJump(char board[][8], Move move){
-    int i = move.i;
-    int j = move.j;
-    int k = move.k;
-    int l = move.l;
+int canJump(char board[][8], Move *move){
+    int i = move->i;
+    int j = move->j;
+    int k = move->k;
+    int l = move->l;
     char from = board[j][i];
     char to = board[l][k];
     int jumpX;
-    int jumpY = j + 1;
+    int jumpY = l + 1;
+    if (l == 7 || k == 7 || k == 0){
+        return 0;
+    }
     if (i < k){
-        jumpX = i + 1;
+        jumpX = k + 1;
     }
     else{
-        jumpX = i - 1;
+        jumpX = k - 1;
     }
     char jumpedPiece = board[jumpY][jumpX];
-    if (jumpedPiece == 'x' || jumpedPiece == 'X'){
-        move.k = jumpX;
-        move.l = jumpY;
+    if (jumpedPiece == ' '){
+        move->k = jumpX;
+        move->l = jumpY;
         return 1;
     }
     return 0;
@@ -91,9 +93,8 @@ Move pickMove(){
     Move currentMove;
     for (int i = 0; i < moves - 1; i++){
         currentMove = availableMoves[i];
-
         if (currentMove.jump == 1){
-            printf("move i %d\n", currentMove.i);
+            printf("jumping from ");
             return currentMove;
         }
     }

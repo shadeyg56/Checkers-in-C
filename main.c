@@ -41,6 +41,9 @@ int main(void){
                     AIMove = pickMove();
 
                     move(AIMove.i, AIMove.j, AIMove.k, AIMove.l);
+                    if (l == 7){
+                        board[AIMove.l][AIMove.k] = 'O';
+                    }
                     turn = 'x';
                     break;
                 }

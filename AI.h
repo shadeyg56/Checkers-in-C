@@ -10,7 +10,7 @@ typedef struct{
 } Move;
 
 int validMoves(char board[][8]);
-int canJump(char board[][8], Move move);
+int canJump(char board[][8], Move *move);
 Move pickMove();
 
 #endif
