@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include "AI.h"
 
+#define ISKING(p) (p == 'O')
 
 size_t moves = 1;
 Move *availableMoves = NULL;
@@ -12,25 +13,39 @@ int validMoves(char board[][8]){
     int iter = 0;
     availableMoves = (Move*) malloc(sizeof(Move));
     Move *currentMove = NULL;
+    int checks = 2;
     for (j = 0; j < 8; j++){
         for (i = 0; i < 8; i++){;
             iter++;
             //printf("iter %d\n", iter++)
-            for (int x = 0; x < 2; x++){
+            if (ISKING(board[j][i])){
+                checks = 4;
+            }
+            for (int x = 0; x < checks; x++){
                 currentMove = &availableMoves[moves-1];
                 currentMove->jump = 0;
                 switch (x){
                     case 0:
                         k = i + 1;
+                        l = j + 1;
                         break;
                     case 1:
                         k = i - 1;
+                        l = j + 1;
+                        break;
+                    case 2:
+                        k = i + 1;
+                        l = j - 1;
+                        break;
+                    case 3:
+                        k = i - 1;
+                        l = j - 1;
                         break;
                 }
                 if (k == 8 || k == -1){
                     continue;
                 }
-                l = j + 1;
+                
                 currentMove->i = i;
                 currentMove->j = j;
                 currentMove->k = k;
@@ -70,7 +85,7 @@ int canJump(char board[][8], Move *move){
     char from = board[j][i];
     char to = board[l][k];
     int jumpX;
-    int jumpY = l + 1;
+    int jumpY;
     if (l == 7 || k == 7 || k == 0){
         return 0;
     }
@@ -79,6 +94,12 @@ int canJump(char board[][8], Move *move){
     }
     else{
         jumpX = k - 1;
+    }
+    if (j < l){
+        jumpY = l + 1;
+    }
+    else{
+        jumpY = l - 1;
     }
     char jumpedPiece = board[jumpY][jumpX];
     if (jumpedPiece == ' '){
