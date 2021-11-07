@@ -115,9 +115,10 @@ Move pickMove(){
     for (int i = 0; i < moves - 1; i++){
         currentMove = availableMoves[i];
         if (currentMove.jump == 1){
-            printf("jumping from ");
+            free(availableMoves);
             return currentMove;
         }
     }
+    free(availableMoves);
     return currentMove;
 }
