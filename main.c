@@ -11,9 +11,9 @@ char board[8][8] = {
     {' ', 'o', ' ', 'o', ' ', 'o', ' ', 'o'},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {'x', ' ', 'x', ' ', ' ', ' ', 'x', ' '},
     {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'x'},
-    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {'x', ' ', 'x', ' ', 'x', ' ', 'O', ' '},
 };
 
 char turn = 'x';
@@ -157,7 +157,7 @@ int move(int i, int j, int k, int l){
             else{
                 jump_y = j - 1;
             }
-            jumped = board[jump_y][jump_x];
+            jumped = tolower(board[jump_y][jump_x]);
             if (jumped != opponent){
                 printf("You can only jump an enemy piece\n");
                 return -1;
