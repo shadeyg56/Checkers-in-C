@@ -11,9 +11,9 @@ char board[8][8] = {
     {' ', 'o', ' ', 'o', ' ', 'o', ' ', 'o'},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {'x', ' ', 'x', ' ', ' ', ' ', 'x', ' '},
     {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'x'},
-    {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
+    {'x', ' ', 'x', ' ', 'x', ' ', 'O', ' '},
 };
 
 char turn = 'x';
@@ -31,17 +31,35 @@ int main(void){
     char i, k;
     int j, l, x, x2;
     int test;
+<<<<<<< HEAD
     Move *AIMove = NULL;
     test = validMoves(board);
     printf("test %d\n", test);
+=======
+    Move AIMove;
+>>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
     printBoard();
     while (gameOver == 0){
         while (1){
             if (mode == 1){
+<<<<<<< HEAD
                 validMoves(board);
                 AIMove = pickMove();
                 move(AIMove->i, AIMove->j, AIMove->k, AIMove->l);
                 continue;
+=======
+                if (turn == 'o'){
+                    validMoves(board);
+                    AIMove = pickMove();
+
+                    move(AIMove.i, AIMove.j, AIMove.k, AIMove.l);
+                    if (l == 7){
+                        board[AIMove.l][AIMove.k] = 'O';
+                    }
+                    turn = 'x';
+                    break;
+                }
+>>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
             }
             printf("%c's turn: ", turn);
             fflush(stdin);
@@ -103,7 +121,9 @@ int move(int i, int j, int k, int l){
         printf("Out of bounds\n");
         return -1;
     }
-    if (tolower(board[j][i]) != turn){
+
+     if (tolower(board[j][i]) != turn){
+        printf("space is %d, %d\n", i, j);
         printf("Not your square\n");
         return -1;
     }
@@ -150,7 +170,7 @@ int move(int i, int j, int k, int l){
             else{
                 jump_y = j - 1;
             }
-            jumped = board[jump_y][jump_x];
+            jumped = tolower(board[jump_y][jump_x]);
             if (jumped != opponent){
                 printf("You can only jump an enemy piece\n");
                 return -1;
