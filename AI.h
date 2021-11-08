@@ -7,14 +7,12 @@ typedef struct{
     int k;
     int l;
     int jump;
+    int score;
 } Move;
 
 int validMoves(char board[][8]);
 int canJump(char board[][8], Move *move);
-<<<<<<< HEAD
-Move *pickMove();
-=======
+int hasNeighbors(char board[][8], int x, int y, char type);
 Move pickMove();
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
 
 #endif

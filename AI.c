@@ -3,20 +3,13 @@
 #include <ctype.h>
 #include "AI.h"
 
-<<<<<<< HEAD
-=======
 #define ISKING(p) (p == 'O')
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
 
 size_t moves = 1;
 Move *availableMoves = NULL;
 
 int validMoves(char board[][8]){
     int i, j, k, l;
-<<<<<<< HEAD
-    Move *currentMove = NULL;
-=======
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
     int iter = 0;
     availableMoves = (Move*) malloc(sizeof(Move));
     Move *currentMove = NULL;
@@ -31,6 +24,7 @@ int validMoves(char board[][8]){
             for (int x = 0; x < checks; x++){
                 currentMove = &availableMoves[moves-1];
                 currentMove->jump = 0;
+                currentMove->score = 0;
                 switch (x){
                     case 0:
                         k = i + 1;
@@ -64,6 +58,7 @@ int validMoves(char board[][8]){
                     if (tolower(board[l][k]) == 'x'){
                         if (canJump(board, currentMove) == 1){
                             currentMove->jump = 1;
+                            currentMove->score++;
                         }
                         else{
                             continue;
@@ -73,20 +68,13 @@ int validMoves(char board[][8]){
                         continue;
                     }
                 }
-                printf("%d, %d to %d, %d is a valid move\n", i, j, k, l);
-<<<<<<< HEAD
-                currentMove->i = i;
-                currentMove->j = j;
-                currentMove->k = k;
-                currentMove->l = l;
-                currentMove->jump = 0;
-                if (canJump(board, currentMove) == 1){
-                    currentMove->jump = 1;
+                if (hasNeighbors(board, k, l, 'o') == 1){
+                    currentMove->score++;
                 }
-                availableMoves = realloc(availableMoves, moves * sizeof(Move));
-                availableMoves[moves-1] = *currentMove;
-=======
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
+                if (hasNeighbors(board, k, l, 'x') == 1){
+                    currentMove->score--;
+                }
+                printf("%d, %d to %d, %d is a valid move\n", i, j, k, l);
                 moves++;
                 availableMoves = realloc(availableMoves, moves * sizeof(Move));
             }
@@ -105,17 +93,6 @@ int canJump(char board[][8], Move *move){
     char from = board[j][i];
     char to = board[l][k];
     int jumpX;
-<<<<<<< HEAD
-    int jumpY = j + 1;
-    if (i < k){
-        jumpX = i + 1;
-    }
-    else{
-        jumpX = i - 1;
-    }
-    char jumpedPiece = board[jumpY][jumpX];
-    if (jumpedPiece == 'x' || jumpedPiece == 'X'){
-=======
     int jumpY;
     if (l == 7 || k == 7 || k == 0){
         return 0;
@@ -136,32 +113,35 @@ int canJump(char board[][8], Move *move){
     if (jumpedPiece == ' '){
         move->k = jumpX;
         move->l = jumpY;
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
         return 1;
     }
     return 0;
 }
 
-<<<<<<< HEAD
-Move *pickMove(){
-    Move *currentMove = NULL;
-    for (int i = 0; i < moves; i++){
-        *currentMove = availableMoves[i];
-        if (currentMove->jump == 1){
-            return currentMove;
-        }
+int hasNeighbors(char board[][8], int x, int y, char type){
+    if (board[y+1][x-1] == 'x' || board[y+1][x+1] == 'x'){
+        return 1;
     }
-=======
+     if (board[y-1][x-1] == 'o' || board[y-1][x+1] == 'o'){
+        return 1;
+    }
+    return 0;
+    
+}
+
 Move pickMove(){
     Move currentMove;
+    Move bestMove;
+    bestMove.score = -2;
     for (int i = 0; i < moves - 1; i++){
         currentMove = availableMoves[i];
-        if (currentMove.jump == 1){
-            free(availableMoves);
-            return currentMove;
+        if (currentMove.score > bestMove.score){
+            bestMove = currentMove;
         }
     }
+    if (bestMove.score == -2){
+        bestMove = currentMove;
+    }
     free(availableMoves);
-    return currentMove;
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
+    return bestMove;
 }

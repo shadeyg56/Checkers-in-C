@@ -31,23 +31,11 @@ int main(void){
     char i, k;
     int j, l, x, x2;
     int test;
-<<<<<<< HEAD
-    Move *AIMove = NULL;
-    test = validMoves(board);
-    printf("test %d\n", test);
-=======
     Move AIMove;
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
     printBoard();
     while (gameOver == 0){
         while (1){
             if (mode == 1){
-<<<<<<< HEAD
-                validMoves(board);
-                AIMove = pickMove();
-                move(AIMove->i, AIMove->j, AIMove->k, AIMove->l);
-                continue;
-=======
                 if (turn == 'o'){
                     validMoves(board);
                     AIMove = pickMove();
@@ -59,7 +47,6 @@ int main(void){
                     turn = 'x';
                     break;
                 }
->>>>>>> a09e7512ab40daeb6b8ef6526091ba40400a5cf6
             }
             printf("%c's turn: ", turn);
             fflush(stdin);
