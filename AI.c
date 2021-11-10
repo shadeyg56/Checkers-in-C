@@ -68,13 +68,13 @@ int validMoves(char board[][8]){
                         continue;
                     }
                 }
-                if (hasNeighbors(board, k, l, 'o') == 1){
+                if (hasNeighbors(board, currentMove, 'o') == 1){
                     currentMove->score++;
                 }
-                if (hasNeighbors(board, k, l, 'x') == 1){
+                if (hasNeighbors(board, currentMove, 'x') == 1){
                     currentMove->score--;
                 }
-                printf("%d, %d to %d, %d is a valid move\n", i, j, k, l);
+                printf("%d, %d to %d, %d is a valid move with a score of %d\n", i, j, k, l, currentMove->score);
                 moves++;
                 availableMoves = realloc(availableMoves, moves * sizeof(Move));
             }
@@ -118,12 +118,25 @@ int canJump(char board[][8], Move *move){
     return 0;
 }
 
-int hasNeighbors(char board[][8], int x, int y, char type){
-    if (board[y+1][x-1] == 'x' || board[y+1][x+1] == 'x'){
-        return 1;
-    }
-     if (board[y-1][x-1] == 'o' || board[y-1][x+1] == 'o'){
-        return 1;
+int hasNeighbors(char board[][8], Move *move, char type){
+    int x = move->k;
+    int y = move->l;
+    int jumpX = move->jumpX;
+    int jumpY = move->jumpY;
+    printf("%c %c\n", board[y+1][x-1], board[y+1][x+1]);
+    switch (type){
+        case 'x':
+            if (board[y+1][x-1] == 'x' && (y+1 != jumpY && x-1 != jumpX)){
+                return 1;
+            }
+            if (board[y+1][x+1] == 'x' && (y+1 != jumpY && x+1 != jumpX)){
+                return 1;
+            }
+            break;
+        case 'o':
+            if (board[y-1][x-1] == 'o' || board[y-1][x+1] == 'o'){
+                return 1;
+            }
     }
     return 0;
     
@@ -133,6 +146,7 @@ Move pickMove(){
     Move currentMove;
     Move bestMove;
     bestMove.score = -2;
+
     for (int i = 0; i < moves - 1; i++){
         currentMove = availableMoves[i];
         if (currentMove.score > bestMove.score){
@@ -143,5 +157,6 @@ Move pickMove(){
         bestMove = currentMove;
     }
     free(availableMoves);
+
     return bestMove;
 }
