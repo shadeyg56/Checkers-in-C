@@ -6,7 +6,7 @@
 #define ISKING(p) (p == 'X' || p == 'O')
 
 char board[8][8] = {
-    {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
+    {' ', 'o', ' ', 'o', ' ',  ' ', ' ', 'o'},
     {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
     {' ', 'o', ' ', ' ', ' ', 'x', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', 'o', ' '},
@@ -89,6 +89,7 @@ int move(int i, int j, int k, int l){
     // }
     int jump_x;
     int jump_y;
+    int hasJump = 1;
     char jumped;
     char opponent;
     int won = 0;
@@ -183,28 +184,39 @@ int move(int i, int j, int k, int l){
                 printf("%c wins the game!", turn);
                 gameOver = 1;
             }
-            jump_y = l + dirY;
-            jump_x = k + dirX;
-            for (int iter = 0; iter < 2; iter++){
-                printf("space is %c\n", tolower(board[jump_y][jump_x]));
-                printf("opponent is %c\n", opponent);
-                if (tolower(board[jump_y][jump_x]) == opponent){
-                        if (0 < jump_y+dirY < 8 && 0 < jump_x+dirX < 8){
-                            printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
-                            if (board[jump_y+dirY][jump_x+dirX] == ' '){
-                                printf("A double jump is available. Would you like to take it? (y/n)\n");
-                                scanf(" %c", &takeDouble);
-                                if (takeDouble == 'y' || takeDouble == 'Y'){
-                                    board[jump_y][jump_x] = ' ';
-                                    printf("jumping to %d, %d\n", jump_x+dirX, jump_y+dirY);
-                                    board[jump_y+dirY][jump_x+dirX] = turn;
+            while (hasJump == 1){
+                jump_y = l + dirY;
+                for (int iter = 0; iter < 2; iter++){
+                    jump_x = k + dirX;
+                    hasJump = 0;
+                    printf("space is %c at %d, %d\n", tolower(board[jump_y][jump_x]), jump_x, jump_y);
+                    printf("opponent is %c\n", opponent);
+                    if (tolower(board[jump_y][jump_x]) == opponent){
+                        printf("jumpx+dir is %d\n", jump_x+dirX);
+                        printf("jumpy+dir is %d\n", jump_y+dirY);
+                            if (jump_y+dirY >= 0 && jump_y+dirY < 8){
+                                if (jump_x+dirX >= 0 && jump_x+dirX < 8){
+                                    
+                                    printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
+                                    if (board[jump_y+dirY][jump_x+dirX] == ' '){
+                                        printf("Another jump is available. Would you like to take it? (y/n)\n");
+                                        scanf(" %c", &takeDouble);
+                                        if (takeDouble == 'y' || takeDouble == 'Y'){
+                                            board[jump_y][jump_x] = ' ';
+                                            printf("jumping to %d, %d\n", jump_x+dirX, jump_y+dirY);
+                                            board[jump_y+dirY][jump_x+dirX] = turn;
+                                            board[l][k] = ' ';
+                                            l = jump_y+(dirY);
+                                            k = jump_x+dirX;
+                                            hasJump = 1;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                        
+                    }
+                    dirX = -1;
                 }
-                dirX = -1;
-                jump_x = k + dirX;
             }
             return 0;
         }
