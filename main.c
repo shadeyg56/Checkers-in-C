@@ -59,9 +59,6 @@ int main(void){
             if (move(x, j, x2, l) == 0){
                 if (turn == 'x'){
                     turn = 'o';
-                    if (l == 0){
-                        board[l][x2] = 'X';
-                    }
                 }
                 else if (turn == 'o'){
                     turn = 'x';
@@ -196,7 +193,6 @@ int move(int i, int j, int k, int l){
                         printf("jumpy+dir is %d\n", jump_y+dirY);
                             if (jump_y+dirY >= 0 && jump_y+dirY < 8){
                                 if (jump_x+dirX >= 0 && jump_x+dirX < 8){
-                                    
                                     printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
                                     if (board[jump_y+dirY][jump_x+dirX] == ' '){
                                         printf("Another jump is available. Would you like to take it? (y/n)\n");
@@ -206,7 +202,7 @@ int move(int i, int j, int k, int l){
                                             printf("jumping to %d, %d\n", jump_x+dirX, jump_y+dirY);
                                             board[jump_y+dirY][jump_x+dirX] = turn;
                                             board[l][k] = ' ';
-                                            l = jump_y+(dirY);
+                                            l = jump_y+dirY;
                                             k = jump_x+dirX;
                                             hasJump = 1;
                                             break;
@@ -216,6 +212,16 @@ int move(int i, int j, int k, int l){
                             }
                     }
                     dirX = -1;
+                }
+            }
+            if (turn == 'x'){
+                if (l == 0){
+                    board[l][k] = 'X';
+                }
+            }
+            else if (turn == 'o'){
+                if (l == 7){
+                    board[l][k] = 'O';
                 }
             }
             return 0;
