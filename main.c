@@ -6,13 +6,13 @@
 #define ISKING(p) (p == 'X' || p == 'O')
 
 char board[8][8] = {
-    {' ', 'o', ' ', 'o', ' ',  ' ', ' ', 'o'},
+    {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
     {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
     {' ', 'o', ' ', ' ', ' ', 'x', ' ', ' '},
-    {' ', ' ', ' ', ' ', ' ', ' ', 'o', ' '},
-    {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'},
-    {'x', ' ', ' ', ' ', 'o', ' ', 'x', ' '},
-    {' ', 'x', ' ', 'x', ' ',  'x', ' ', 'x'},
+    {' ', ' ', 'o', ' ', ' ', ' ', ' ', ' '},
+    {' ', ' ', ' ', 'x', ' ', ' ', ' ', 'x'},
+    {'x', ' ', ' ', ' ', ' ', ' ', 'x', ' '},
+    {' ', ' ', ' ', 'x', ' ',  'x', ' ', 'x'},
     {'x', ' ', 'x', ' ', 'x', ' ', 'x', ' '},
 };
 
@@ -20,7 +20,7 @@ char turn = 'x';
 int xPieces = 12;
 int oPieces = 12;
 int gameOver = 0;
-int mode = 0;
+int mode = 1;
 
 void printBoard();
 int letterToCoord(char letter);
@@ -62,9 +62,6 @@ int main(void){
                 }
                 else if (turn == 'o'){
                     turn = 'x';
-                    if (l == 7){
-                        board[l][x2] = 'O';
-                    }
                 }
                 break;
             }
@@ -195,12 +192,17 @@ int move(int i, int j, int k, int l){
                                 if (jump_x+dirX >= 0 && jump_x+dirX < 8){
                                     printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
                                     if (board[jump_y+dirY][jump_x+dirX] == ' '){
-                                        printf("Another jump is available. Would you like to take it? (y/n)\n");
-                                        scanf(" %c", &takeDouble);
+                                        if (mode == 1){
+                                            takeDouble = 'y';
+                                        }
+                                        else{
+                                            printf("Another jump is available. Would you like to take it? (y/n)\n");
+                                            scanf(" %c", &takeDouble);
+                                        }
                                         if (takeDouble == 'y' || takeDouble == 'Y'){
                                             board[jump_y][jump_x] = ' ';
                                             printf("jumping to %d, %d\n", jump_x+dirX, jump_y+dirY);
-                                            board[jump_y+dirY][jump_x+dirX] = turn;
+                                            board[jump_y+dirY][jump_x+dirX] = board[l][k];
                                             board[l][k] = ' ';
                                             l = jump_y+dirY;
                                             k = jump_x+dirX;

@@ -14,6 +14,7 @@ int validMoves(char board[][8]){
     availableMoves = (Move*) malloc(sizeof(Move));
     Move *currentMove = NULL;
     int checks = 2;
+    int hasJump = 1;
     for (j = 0; j < 8; j++){
         for (i = 0; i < 8; i++){;
             iter++;
@@ -58,7 +59,7 @@ int validMoves(char board[][8]){
                     if (tolower(board[l][k]) == 'x'){
                         if (canJump(board, currentMove) == 1){
                             currentMove->jump = 1;
-                            currentMove->score++;
+                            currentMove->score += 2;
                         }
                         else{
                             continue;
@@ -72,7 +73,18 @@ int validMoves(char board[][8]){
                     currentMove->score++;
                 }
                 if (hasNeighbors(board, currentMove, 'x') == 1){
-                    currentMove->score--;
+                    if (currentMove->jump == 1){
+                        if (canJump(board, currentMove) == 1){
+                            printf("can double jump\n");
+                            currentMove->score += 2;
+                        }
+                        else{
+                            printf("can't double jump\n");
+                        }
+                    }
+                    else{
+                        currentMove->score--;
+                    }
                 }
                 printf("%d, %d to %d, %d is a valid move with a score of %d\n", i, j, k, l, currentMove->score);
                 moves++;
@@ -111,6 +123,7 @@ int canJump(char board[][8], Move *move){
     }
     char jumpedPiece = board[jumpY][jumpX];
     if (jumpedPiece == ' '){
+
         move->k = jumpX;
         move->l = jumpY;
         return 1;
@@ -123,13 +136,20 @@ int hasNeighbors(char board[][8], Move *move, char type){
     int y = move->l;
     int jumpX = move->jumpX;
     int jumpY = move->jumpY;
-    printf("%c %c\n", board[y+1][x-1], board[y+1][x+1]);
     switch (type){
         case 'x':
             if (board[y+1][x-1] == 'x' && (y+1 != jumpY && x-1 != jumpX)){
+                if (move->jump == 1){
+                    move->k = x-1;
+                    move->l = y-1;
+                }
                 return 1;
             }
             if (board[y+1][x+1] == 'x' && (y+1 != jumpY && x+1 != jumpX)){
+                if (move->jump == 1){
+                    move->k = x+1;
+                    move->l = y+1;
+                }
                 return 1;
             }
             break;
