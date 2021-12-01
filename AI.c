@@ -5,12 +5,13 @@
 
 #define ISKING(p) (p == 'O')
 
-size_t moves = 1;
+size_t moves;
 Move *availableMoves = NULL;
 
 int validMoves(char board[][8]){
     int i, j, k, l;
     int iter = 0;
+    moves = 1;
     availableMoves = (Move*) malloc(sizeof(Move));
     Move *currentMove = NULL;
     int checks = 2;
@@ -78,9 +79,9 @@ int validMoves(char board[][8]){
                             printf("can double jump\n");
                             currentMove->score += 2;
                         }
-                        else{
-                            printf("can't double jump\n");
-                        }
+                        currentMove->k = currentMove->jumpX;
+                        currentMove->l = currentMove->jumpY;
+                        printf("can't double jump\n");
                     }
                     else{
                         currentMove->score--;
@@ -98,6 +99,8 @@ int validMoves(char board[][8]){
 
 
 int canJump(char board[][8], Move *move){
+    // does NOT check if a piece can jump, but checks that a piece COULD be jumped.
+    // don't get confused
     int i = move->i;
     int j = move->j;
     int k = move->k;
@@ -138,14 +141,18 @@ int hasNeighbors(char board[][8], Move *move, char type){
     int jumpY = move->jumpY;
     switch (type){
         case 'x':
-            if (board[y+1][x-1] == 'x' && (y+1 != jumpY && x-1 != jumpX)){
+        // && (y+1 != jumpY && x-1 != jumpX)
+            move->jumpX = x;
+            move->jumpY = y;
+            if (board[y+1][x-1] == 'x' ){
                 if (move->jump == 1){
                     move->k = x-1;
-                    move->l = y-1;
+                    move->l = y+1;
                 }
                 return 1;
             }
-            if (board[y+1][x+1] == 'x' && (y+1 != jumpY && x+1 != jumpX)){
+            //  && (y+1 != jumpY && x+1 != jumpX)
+            if (board[y+1][x+1] == 'x'){
                 if (move->jump == 1){
                     move->k = x+1;
                     move->l = y+1;
@@ -166,7 +173,6 @@ Move pickMove(){
     Move currentMove;
     Move bestMove;
     bestMove.score = -2;
-
     for (int i = 0; i < moves - 1; i++){
         currentMove = availableMoves[i];
         if (currentMove.score > bestMove.score){
@@ -176,7 +182,8 @@ Move pickMove(){
     if (bestMove.score == -2){
         bestMove = currentMove;
     }
+    
+    printf("taking move with score %d %d, %d to %d, %d\n", bestMove.score, bestMove.i, bestMove.j, bestMove.k, bestMove.l);
     free(availableMoves);
-
     return bestMove;
 }
