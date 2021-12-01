@@ -9,7 +9,7 @@ char board[8][8] = {
     {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
     {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
     {' ', 'o', ' ', ' ', ' ', 'x', ' ', ' '},
-    {' ', ' ', 'o', ' ', ' ', ' ', ' ', ' '},
+    {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', 'x', ' ', ' ', ' ', 'x'},
     {'x', ' ', ' ', ' ', ' ', ' ', 'x', ' '},
     {' ', ' ', ' ', 'x', ' ',  'x', ' ', 'x'},
@@ -20,8 +20,9 @@ char turn = 'x';
 int xPieces = 12;
 int oPieces = 12;
 int gameOver = 0;
-int mode = 1;
+int mode;
 
+int mainMenu();
 void printBoard();
 int letterToCoord(char letter);
 int move(int i, int j, int k, int l);
@@ -30,8 +31,8 @@ int checkForWin();
 int main(void){
     char i, k;
     int j, l, x, x2;
-    int test;
     Move AIMove;
+    mode = mainMenu();
     printBoard();
     while (gameOver == 0){
         while (1){
@@ -39,7 +40,6 @@ int main(void){
                 if (turn == 'o'){
                     validMoves(board);
                     AIMove = pickMove();
-
                     move(AIMove.i, AIMove.j, AIMove.k, AIMove.l);
                     if (l == 7){
                         board[AIMove.l][AIMove.k] = 'O';
@@ -74,6 +74,31 @@ int main(void){
         }
     }
     return 0;
+}
+
+int mainMenu(){
+    int mode;
+    int selection;
+    int cont = 1;
+    while (cont){
+        printf("Welcome to Checkers in C\n");
+        printf("Select a mode:\n");
+        printf("[1] Player vs Player\n");
+        printf("[2] Player vs Computer\n");
+        scanf(" %d", &selection);
+        printf("%d", selection);
+        switch (selection){
+            case 1:
+                mode = 2;
+                cont = 0;
+                break;
+            case 2:
+                mode = 1;
+                cont = 0;
+                break;
+        }
+    }
+    return mode;
 }
 
 int move(int i, int j, int k, int l){
