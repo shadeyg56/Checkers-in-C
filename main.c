@@ -31,6 +31,7 @@ int checkForWin();
 int main(void){
     char i, k;
     int j, l, x, x2;
+    int inputs;
     Move AIMove;
     mode = mainMenu();
     printBoard();
@@ -50,12 +51,18 @@ int main(void){
             }
             printf("%c's turn: ", turn);
             fflush(stdin);
-            scanf("%c%d", &i, &j);
+            inputs = scanf("%c%d", &i, &j);
             printf("To: ");
             fflush(stdin);
-            scanf("%c%d", &k, &l);
+            inputs += scanf("%c%d", &k, &l);
             x = letterToCoord(i);
             x2 = letterToCoord(k);
+            if (x == -1 || x2 == -1){
+                continue;
+            }
+            if (inputs != 4){
+                continue;
+            }
             if (move(x, j, x2, l) == 0){
                 if (turn == 'x'){
                     turn = 'o';
@@ -302,6 +309,8 @@ int letterToCoord(char letter){
             return 6;
         case 'h':
             return 7;
+        default:
+            return -1;
     }
 }
 
