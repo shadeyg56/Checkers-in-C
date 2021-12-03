@@ -216,14 +216,9 @@ int move(int i, int j, int k, int l){
                 for (int iter = 0; iter < 2; iter++){
                     jump_x = k + dirX;
                     hasJump = 0;
-                    printf("space is %c at %d, %d\n", tolower(board[jump_y][jump_x]), jump_x, jump_y);
-                    printf("opponent is %c\n", opponent);
                     if (tolower(board[jump_y][jump_x]) == opponent){
-                        printf("jumpx+dir is %d\n", jump_x+dirX);
-                        printf("jumpy+dir is %d\n", jump_y+dirY);
                             if (jump_y+dirY >= 0 && jump_y+dirY < 8){
                                 if (jump_x+dirX >= 0 && jump_x+dirX < 8){
-                                    printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
                                     if (board[jump_y+dirY][jump_x+dirX] == ' '){
                                         if (mode == 1 && turn == 'o'){
                                             takeDouble = 'y';
@@ -234,7 +229,6 @@ int move(int i, int j, int k, int l){
                                         }
                                         if (takeDouble == 'y' || takeDouble == 'Y'){
                                             board[jump_y][jump_x] = ' ';
-                                            printf("jumping to %d, %d\n", jump_x+dirX, jump_y+dirY);
                                             board[jump_y+dirY][jump_x+dirX] = board[l][k];
                                             board[l][k] = ' ';
                                             l = jump_y+dirY;
