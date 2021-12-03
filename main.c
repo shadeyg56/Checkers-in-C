@@ -6,10 +6,10 @@
 #define ISKING(p) (p == 'X' || p == 'O')
 
 char board[8][8] = {
-    {' ', 'o', ' ', 'o', ' ',  'o', ' ', 'o'},
+    {' ', 'o', ' ', 'o', ' ',  'o', ' ', ' '},
     {'o', ' ', 'o', ' ', 'o', ' ', 'o', ' '},
-    {' ', 'o', ' ', ' ', ' ', 'x', ' ', ' '},
-    {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    {' ', 'o', ' ', ' ', ' ', ' ', ' ', ' '},
+    {' ', ' ', ' ', ' ', 'o', ' ', ' ', ' '},
     {' ', ' ', ' ', 'x', ' ', ' ', ' ', 'x'},
     {'x', ' ', ' ', ' ', ' ', ' ', 'x', ' '},
     {' ', ' ', ' ', 'x', ' ',  'x', ' ', 'x'},
@@ -209,6 +209,7 @@ int move(int i, int j, int k, int l){
             if (won == 1){
                 printf("%c wins the game!", turn);
                 gameOver = 1;
+                hasJump = 0;
             }
             while (hasJump == 1){
                 jump_y = l + dirY;
@@ -224,7 +225,7 @@ int move(int i, int j, int k, int l){
                                 if (jump_x+dirX >= 0 && jump_x+dirX < 8){
                                     printf("second space is %c\n", board[jump_y+dirY][jump_x+dirX]);
                                     if (board[jump_y+dirY][jump_x+dirX] == ' '){
-                                        if (mode == 1){
+                                        if (mode == 1 && turn == 'o'){
                                             takeDouble = 'y';
                                         }
                                         else{
